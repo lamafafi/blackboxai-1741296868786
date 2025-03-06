@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player Pro</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- JSZip Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#6B7280',
+                        accent: '#10B981',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <div class="min-h-screen">
+        <!-- Navigation -->
+        <nav class="bg-gray-800 border-b border-gray-700">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-music text-primary text-2xl"></i>
+                        </div>
+                        <div class="ml-4 text-lg font-semibold">Music Player Pro</div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <button class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">
+                            <i class="fas fa-folder-open mr-2"></i>Open Files
+                        </button>
+                        <button class="px-3 py-2 rounded-md text-sm font-medium text-gray-300 hover:text-white hover:bg-gray-700">
+                            <i class="fas fa-cog mr-2"></i>Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Track Player -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="text-xl font-semibold">Now Playing</div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-400">120 BPM</span>
+                        <button class="p-2 rounded hover:bg-gray-700">
+                            <i class="fas fa-metronome"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Waveform -->
+                <div class="h-32 bg-gray-700 rounded mb-4"></div>
+
+                <!-- Playback Controls -->
+                <div class="flex items-center justify-center space-x-6">
+                    <button class="p-3 rounded-full hover:bg-gray-700">
+                        <i class="fas fa-backward-step text-xl"></i>
+                    </button>
+                    <button class="p-4 rounded-full bg-primary hover:bg-primary/90">
+                        <i class="fas fa-play text-2xl"></i>
+                    </button>
+                    <button class="p-3 rounded-full hover:bg-gray-700">
+                        <i class="fas fa-forward-step text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Setlist and Multitrack Selection -->
+            <div class="bg-gray-800 rounded-lg p-6 mb-8">
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- Setlist Selection -->
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Select Setlist</label>
+                        <select id="main-setlist-select" 
+                                class="w-full px-3 py-2 bg-gray-700 rounded text-sm">
+                            <option value="">Choose a setlist...</option>
+                        </select>
+                    </div>
+                    <!-- Multitrack Selection -->
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Select Multitrack</label>
+                        <select id="main-multitrack-select" 
+                                class="w-full px-3 py-2 bg-gray-700 rounded text-sm">
+                            <option value="">Choose a multitrack...</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track List -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <div class="text-xl font-semibold mb-4">Tracks</div>
+                <div class="space-y-4" id="track-list">
+                    <!-- Track Item -->
+                    <div class="flex items-center justify-between p-3 bg-gray-700 rounded">
+                        <div class="flex items-center">
+                            <button class="p-2 rounded hover:bg-gray-600">
+                                <i class="fas fa-play text-sm"></i>
+                            </button>
+                            <span class="ml-3">Track 1</span>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <!-- Volume Slider -->
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-volume-high text-sm"></i>
+                                <input type="range" class="w-24" min="0" max="100" value="100">
+                            </div>
+                            <!-- Pan Slider -->
+                            <div class="flex items-center space-x-2">
+                                <i class="fas fa-arrows-left-right text-sm"></i>
+                                <input type="range" class="w-24" min="-100" max="100" value="0">
+                            </div>
+                            <!-- Mute/Solo Buttons -->
+                            <button class="p-2 rounded hover:bg-gray-600" title="Mute">
+                                <i class="fas fa-volume-xmark text-sm"></i>
+                            </button>
+                            <button class="p-2 rounded hover:bg-gray-600" title="Solo">
+                                <i class="fas fa-headphones text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/audioEngine.js"></script>
+    <script src="js/trackManager.js"></script>
+    <script src="js/ui.js"></script>
+</body>
+</html>
